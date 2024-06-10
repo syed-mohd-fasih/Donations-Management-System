@@ -9,10 +9,13 @@
 #include <iomanip>
 #include <stdlib.h>
 #include <windows.h>
+
 using namespace std;
 double XX;
+
 void header();
 void load();
+
 string onlyTakeInteger(string x)
 {
     string num;
@@ -38,12 +41,11 @@ string onlyTakeInteger(string x)
             cout << "\r" << x << num << " ";
             cout << "\r" << x << num;
         }
-        if (ch == 13)
-            break;
+        if (ch == 13) break;
     } while (1);
     return num;
 }
-string onlyTakeAlphabate(string x)
+string onlyTakeAlphabet(string x)
 {
     string num;
     string temp;
@@ -70,8 +72,7 @@ string onlyTakeAlphabate(string x)
             cout << "\r" << x << num << " ";
             cout << "\r" << x << num;
         }
-        if (ch == 13)
-            break;
+        if (ch == 13) break;
     } while (1);
     return num;
 }
@@ -80,16 +81,19 @@ string generateID()
     struct tm timee;
     time_t now = time(0);
     errno_t err = localtime_s(&timee, &now);
+    
     if (err == 0)
         cout << "\nSuccess\n";
     else
         cout << "\nError\n";
+
     int year = 1900 + timee.tm_year;
     int month = timee.tm_mon + 1;
     int hour = timee.tm_hour;
     int minute = timee.tm_min;
     char id[12];
     int index = 0;
+    
     id[index++] = '0' + year / 10 % 10;
     id[index++] = '0' + year % 10;
     id[index++] = '-';
@@ -98,8 +102,10 @@ string generateID()
     id[index++] = '0' + minute / 10;
     id[index++] = '0' + minute % 10;
     id[index] = '\0';
+    
     return string(id);
 }
+
 class BankManager;
 class Bank
 {
@@ -130,8 +136,12 @@ public:
     friend class BankManager;
 };
 Bank::Bank() : BankName("NaN"), AccountNumber(0000000), AccountType("NaN"), TransactionId(GenerateTransactionID()), PinCode("1234"), Balance(0.0) {}
-Bank::Bank(string bankName, long long accountNumber, string accountType, string transactionId, string pinCode, double balance) : BankName(bankName), AccountNumber(accountNumber), AccountType(accountType), TransactionId(transactionId.empty() ? GenerateTransactionID() : transactionId), PinCode(pinCode), Balance(balance) { SaveAccountInfo(); }
-Bank::Bank(string bankName, long long accountNumber, string accountType, string transactionId, string pinCode, double balance, int n) : BankName(bankName), AccountNumber(accountNumber), AccountType(accountType), TransactionId(transactionId.empty() ? GenerateTransactionID() : transactionId), PinCode(pinCode), Balance(balance) {}
+Bank::Bank(string bankName, long long accountNumber, string accountType, string transactionId, string pinCode, double balance) 
+    : BankName(bankName), AccountNumber(accountNumber), AccountType(accountType), 
+    TransactionId(transactionId.empty() ? GenerateTransactionID() : transactionId), PinCode(pinCode), Balance(balance) { SaveAccountInfo(); }
+Bank::Bank(string bankName, long long accountNumber, string accountType, string transactionId, string pinCode, double balance, int n) 
+    : BankName(bankName), AccountNumber(accountNumber), AccountType(accountType), 
+    TransactionId(transactionId.empty() ? GenerateTransactionID() : transactionId), PinCode(pinCode), Balance(balance) {}
 Bank::Bank(const Bank &b)
 {
     this->BankName = b.BankName;
@@ -149,9 +159,7 @@ void Bank::SaveAccountInfo() const
         outputFile << AccountNumber << "," << BankName << "," << AccountType << "," << TransactionId << "," << PinCode << "," << fixed << setprecision(2) << Balance << "," << endl;
         outputFile << "***********" << endl;
         outputFile.close();
-    }
-    else
-    {
+    } else {
         cout << "\n\n\nSystem Error: Unable to open file for account information update.\n\n\n"
              << endl;
     }
@@ -223,6 +231,7 @@ void Bank::SetBalance(double amount)
 {
     Balance += amount;
 }
+
 class User
 {
 protected:
@@ -249,17 +258,17 @@ public:
             cout << "Enter your password: ";
             cin >> pass;
         }
+        
         this->username = Username;
         this->email = Email;
+        
         while (1)
         {
             if (isPasswordValid(pass))
             {
                 this->password = encryptPassword(pass);
                 break;
-            }
-            else
-            {
+            } else {
                 cout << "Invalid Password! Re-Enter password: " << endl;
                 cout << "Enter Password here: " << endl;
                 cin >> pass;
@@ -272,10 +281,7 @@ public:
                 int n = stoi(Id.substr(4, 4)) + 1;
                 string m = to_string(n);
                 if (n < 1000)
-                {
                     m = Id.substr(0, 4) + "0" + m;
-                }
-
                 Id = m;
             }
         }
@@ -335,32 +341,22 @@ public:
             else if (c >= '0' && c <= '9')
             {
                 hasNumber = true;
-            }
-            else
-            {
+            } else {
                 hasSpecialChar = true;
             }
         }
+
         if (!hasSpecialChar)
-        {
             cout << "\nYour password must contain at least one special character.\n";
-        }
         if (!hasUpperCase)
-        {
             cout << "\nYour password must contain at least one uppercase letter.\n";
-        }
         if (!hasLowerCase)
-        {
             cout << "\nYour password must contain at least one lowercase letter.\n";
-        }
         if (!hasNumber)
-        {
             cout << "\nYour password must contain at least one numeric character.\n";
-        }
         if (password.size() < 6)
-        {
             cout << "\nYour password must be at least 6 characters long.\n";
-        }
+
         return hasSpecialChar && hasUpperCase && hasLowerCase && hasNumber && password.size() >= 6;
     }
     string encryptPassword(string x)
@@ -384,13 +380,9 @@ public:
         for (int i = 1; i < x.size(); i++)
         {
             if (i % 2 == 0)
-            {
                 x[i] += 2;
-            }
             else
-            {
                 x[i] -= 2;
-            }
         }
         x = x + Mark;
         return x;
@@ -446,9 +438,7 @@ public:
         {
             fout << email << "," << username << "," << password << "," << userId << "," << endl;
             fout.close();
-        }
-        else
-        {
+        } else {
             cout << "\n\n\nSystem Error: Could not open file for writing!\n\n\n"
                  << endl;
         }
@@ -460,9 +450,7 @@ public:
         {
             fout << email << "," << userId << "," << bankAccount.GetAccountNumber() << "," << endl;
             fout.close();
-        }
-        else
-        {
+        } else {
             cout << "\n\n\nSystem Error: Could not open file for writing!\n\n\n"
                  << endl;
         }
@@ -476,13 +464,9 @@ public:
         {
             string storedEmail = line.substr(0, line.find(","));
             if (storedEmail == email)
-            {
                 fout << email << "," << username << "," << password << "," << userId << "," << endl;
-            }
             else
-            {
                 fout << line << endl;
-            }
         }
         fin.close();
         fout.close();
@@ -774,9 +758,7 @@ public:
             fout.close();
             remove("Acceptor.txt");
             rename("temp.txt", "Acceptor.txt");
-        }
-        else
-        {
+        } else {
             cout << "\n\n\nSystem Error: Could not open file for writing!\n\n\n"
                  << endl;
             fin.close();
@@ -798,9 +780,7 @@ public:
         {
             cout << "\n\n\nSystem Error: User not found! Please try again with a valid email.\n\n\n"
                  << endl;
-        }
-        else
-        {
+        } else {
             if (user.getPassword() == user.encryptPassword(password))
             {
                 cout << "\n\n\nSystem Message: Login successful!\n\n\n"
@@ -842,9 +822,7 @@ public:
                         break;
                     }
                 } while (choice1 != 4);
-            }
-            else
-            {
+            } else {
                 cout << "\n\n\nMessage Error: Incorrect password! Please try again.\n\n\n"
                      << endl;
                 ch = _getch();
@@ -888,9 +866,7 @@ public:
             cout << "\n\n\nSystem Error: Email already exists! Please try again with a different email.\n\n\n"
                  << endl;
             ch = _getch();
-        }
-        else
-        {
+        } else {
             char BankName[20];
             char accType[20];
             long long aNum;
@@ -980,9 +956,7 @@ public:
             cout << "\n\n\nSystem Error: User not found! Please try again with a valid email.\n\n\n"
                  << endl;
             ch = _getch();
-        }
-        else
-        {
+        } else {
             if (dnr.getPassword() == dnr.encryptPassword(password))
             {
                 cout << "\n\t\t\tSystem Message: Login successful!\n\n\n"
@@ -1010,9 +984,7 @@ public:
                             if (!fin)
                             {
                                 cout << "\n\n\nSystem Error: Error opening file!\n\n\n";
-                            }
-                            else
-                            {
+                            } else {
                                 cout << "\n\n\n\t-----------------------------------------------------------------------------------------------------------------------------";
                                 cout << "\n\t|Acceptor ID| " << "\t" << "|\t\tAcceptor email\t |" << "\t" << "|Acceptor Account Number|" << endl;
                                 cout << "\n\t-----------------------------------------------------------------------------------------------------------------------------\n\n\n";
@@ -1058,9 +1030,7 @@ public:
                         break;
                     }
                 } while (choice1 != 4);
-            }
-            else
-            {
+            } else {
                 cout << "\n\n\nSystem Error: Incorrect password! Please try again.\n\n\n"
                      << endl;
                 ch = _getch();
@@ -1069,6 +1039,11 @@ public:
     }
     friend class BankManager;
 };
+void Donor::Donate(Donor &x, long long y, double amount) const
+{
+    BankManager::TransferMoney(x, y, amount);
+}
+
 class BankManager
 {
 public:
@@ -1109,9 +1084,7 @@ void BankManager::TransferMoney(Donor &x, long long y, double amount)
                     tempFile << "***********" << endl;
                     cout << "\nTransfer Successful!\n";
                     ch = _getch();
-                }
-                else
-                {
+                } else {
                     tempFile << accountNumber << "," << bankName << "," << accountType << "," << transactionId << "," << pinCode << "," << bal << "," << endl;
                     tempFile << "***********" << endl;
                 }
@@ -1120,16 +1093,12 @@ void BankManager::TransferMoney(Donor &x, long long y, double amount)
             tempFile.close();
             remove("account_data.txt");
             rename("temp_data.txt", "account_data.txt");
-        }
-        else
-        {
+        } else {
             cout << "\n\n\nSystem Error: Unable to open file for account information update.\n\n\n"
                  << endl;
             ch = _getch();
         }
-    }
-    else
-    {
+    } else {
         cout << "\n\n\nSystem Message: Entered Amount is Greater Than Bank Balance.\n\n\n"
              << endl;
         ch = _getch();
@@ -1156,10 +1125,7 @@ bool BankManager::AccountExists(long long accountNumber)
     }
     return false;
 }
-void Donor::Donate(Donor &x, long long y, double amount) const
-{
-    BankManager::TransferMoney(x, y, amount);
-}
+
 class FundManager : public User
 {
     int managerId;
@@ -1178,14 +1144,15 @@ public:
         return managerId;
     }
 };
+
 void header()
 {
     system("CLS");
-    cout << "\t\t\t\tC++ OOP DONATE NOW PROJECT:" << endl;
-    cout << "\t\t\t\tMembers: " << endl;
-    cout << "\t\t\t\tk224599 Umer Ahmed BCS-2C" << endl;
-    cout << "\t\t\t\tk224494 Fasih BCS-2C" << endl;
-    cout << "\t\t\t\tk224648 Jawwad Ahmed BCS-2C" << endl;
+    cout << "\t\t\t\tC++ OOP DONATE NOW PROJECT:" << endl
+         << "\t\t\t\tMembers: " << endl
+         << "\t\t\t\tk224599 Umer Ahmed BCS-2C" << endl
+         << "\t\t\t\tk224494 Fasih BCS-2C" << endl
+         << "\t\t\t\tk224648 Jawwad Ahmed BCS-2C" << endl;
     return;
 }
 void load()
@@ -1203,6 +1170,7 @@ void load()
     cout << "]\n\n\n";
     sleep(2);
 }
+
 int main()
 {
     Donor donor;
