@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <iomanip>
 #include <stdlib.h>
-#include <windows.h>
+#include <Windows.h>
 
 using namespace std;
 double XX;
@@ -107,6 +107,9 @@ string generateID()
 }
 
 class BankManager;
+class Bank;
+class User;
+
 class Bank
 {
     string BankName;
@@ -836,6 +839,7 @@ class Donor : public User
     int donorId;
 
 public:
+    friend class BankManager;
     Donor() : User() { donorId = 0; }
     Donor(string name, string email, string password, Bank &account, string Id = "D" + generateID()) : User(name, email, password, account, Id)
     {
@@ -936,7 +940,9 @@ public:
         fin.close();
         return Donor();
     }
-    void Donate(Donor &x, long long y, double amount) const;
+    void Donate(Donor &x, long long y, double amount) const {
+        BankManager::TransferMoney(x, y, amount);
+    }
     void login()
     {
         char ch;
@@ -1037,12 +1043,7 @@ public:
             }
         }
     }
-    friend class BankManager;
 };
-void Donor::Donate(Donor &x, long long y, double amount) const
-{
-    BankManager::TransferMoney(x, y, amount);
-}
 
 class BankManager
 {
@@ -1164,11 +1165,11 @@ void load()
     cout << "]\r\t\t\tLoading [";
     for (int i = 0; i < 25; i++)
     {
-        sleep(1);
+        Sleep(10);
         cout << b;
     }
     cout << "]\n\n\n";
-    sleep(2);
+    Sleep(20);
 }
 
 int main()
