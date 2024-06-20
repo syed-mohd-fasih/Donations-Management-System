@@ -32,8 +32,8 @@ The Donations Management System is designed to facilitate the management of dona
 
 2. Clone this repository to your local machine:
     ```sh
-    git clone https://github.com/your-repo/donations-management-system.git
-    cd donations-management-system
+    git clone https://github.com/syed-mohd-fasih/Donations-Management-System.git
+    cd Donations-Management-System
     ```
 
 ## Implementation Details
